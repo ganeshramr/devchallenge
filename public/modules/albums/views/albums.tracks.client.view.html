@@ -5,10 +5,20 @@
     <div class ='row'>
     <div class="col-md-12 text-centre">
       <div class="list-group">
-            <small class="list-group-item-text"> click track title to preview </small>
-                    <a data-ng-repeat="track in albumTracks.items"   class="list-group-item" target="_blank" data-ng-href="{{track.preview_url}}">
+            
+                    <div data-ng-repeat="track in albumTracks.items"   class="list-group-item" >
                         <h4  class="list-group-item-heading" data-ng-bind="track.name" ></h4>
-        			</a>
+                        <a target="_blank" data-ng-href="{{track.preview_url}}"><img height="50" width="50" style="cursor: pointer"   src='modules/core/img/brand/play.jpg'/></a>
+        			
+                    <div ng-switch on="globalFavs.tracks.indexOf(track.id) > -1" align="right" > 
+                     <div ng-switch-when="true" >
+                    <img height="30" width="30"  vertical-align: "top" type='button' src='modules/core/img/brand/favicon.png' />
+                </div>
+                <div ng-switch-when="false" >
+                    <img height="30" width="30" style="cursor: pointer"   src='modules/core/img/brand/yettofavicon.jpeg' ng-click="addToGlobalFavList(track.id,'tracks')"/>
+                </div>
+                    </div>
+                    </div>
                         
         </div>  
                     

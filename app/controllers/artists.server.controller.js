@@ -35,4 +35,8 @@ exports.list = function(req, res) {
     				console.error(err);
  			 });
  		}
+
+ 		if(!req.query.id && !req.query.name){
+ 			res.jsonp({});
+ 		}
  };

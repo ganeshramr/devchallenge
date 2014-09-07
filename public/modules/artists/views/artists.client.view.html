@@ -16,14 +16,25 @@
             </fieldset>
 
             <div class="list-group">
-                 <div infinite-scroll="myPagingFunction()" infinite-scroll-distance="1">
-                    <a data-ng-repeat="artist in artistsList.artists.items"  data-ng-href="#!/artists/{{artist.id}}/albums?artistName={{artist.name}}" class="list-group-item">
-                        <h4 class="list-group-item-heading" data-ng-bind="artist.name"></h4>
-                        <img ng-src="{{artist.images[2].url}}" />
-                    </a>
-                </div>
 
-                <div ng-cloak ng-hide="artistsList.artists.items.length > 0 || !artistName">No artists mathcing the name found.<div>
+                 <div infinite-scroll="myPagingFunction()" infinite-scroll-distance="3">
+                    <div  class="list-group-item"  data-ng-repeat="artist in artistsList.artists.items">
+                        <a data-ng-href="#!/artists/{{artist.id}}/albums?artistName={{artist.name}}"><h4 class="list-group-item-heading" data-ng-bind="artist.name" ></h4> </a>
+                        <a data-ng-href="#!/artists/{{artist.id}}/albums?artistName={{artist.name}}"><img ng-src="{{artist.images[2].url}}" data-ng-href="#!/artists/{{artist.id}}/albums?artistName={{artist.name}}"/></a>
+                     <div ng-switch on="globalFavs.artists.indexOf(artist.id) > -1" align="right" > 
+                     <div ng-switch-when="true" >
+                    <img height="30" width="30"  vertical-align: "top" type='button' src='modules/core/img/brand/favicon.png'/>
+                </div>
+                <div ng-switch-when="false" >
+                    <img height="30" width="30" style="cursor: pointer"   src='modules/core/img/brand/yettofavicon.jpeg' ng-click="addToGlobalFavList(artist.id,'artists')"/>
+                </div>
+                    </div>
+                    
+
+                </div>
+            </div>
+
+            <div ng-cloak ng-hide="artistsList.artists.items.length > 0 || !artistName">No artists mathcing the name found.</div>
             
         </div> 
     </section>

@@ -6,16 +6,30 @@
     <div class="col-md-12 text-centre">
        
                     <div class="list-group">
-                  <div infinite-scroll="myPagingFunctionForAlbums()" infinite-scroll-distance="1">
-                    <a data-ng-repeat="album in albumList.items"  data-ng-href="#!/albums/{{album.id}}?name={{album.name}}" class="list-group-item">
-                        <h4 class="list-group-item-heading" data-ng-bind="album.name"></h4>
-                        <img ng-src="{{album.images[2].url}}" />
-                    </a>
-                </a>
+                  <div infinite-scroll="myPagingFunctionForAlbums()" infinite-scroll-distance="3">
+                    <div data-ng-repeat="album in albumList.items"   class="list-group-item">
+                        <a data-ng-href="#!/albums/{{album.id}}?name={{album.name}}"><h4 class="list-group-item-heading" data-ng-bind="album.name"></h4></a>
+                        <a data-ng-href="#!/albums/{{album.id}}?name={{album.name}}"><img ng-src="{{album.images[2].url}}" /></a>
+                        <div ng-switch on="globalFavs.albums.indexOf(album.id) > -1" align="right" > 
+                     <div ng-switch-when="true" >
+                    <img height="30" width="30"  vertical-align: "top" type='button' src='modules/core/img/brand/favicon.png' />
+                </div>
+                <div ng-switch-when="false" >
+                    <img height="30" width="30" style="cursor: pointer"   src='modules/core/img/brand/yettofavicon.jpeg' ng-click="addToGlobalFavList(album.id,'albums')"/>
+                </div>
+                    </div>
+                    
+                </div>
             </div>
+
+            
+            <div ng-hide="albumList.items.length">No Albums By Artist found</div>
+            
         </div> 
 
-        <div ng-cloak ng-hide="albumList.items.length > 0">No Albums by artist available .<div>
+        </div> 
+
+        
             
         </div> 
 

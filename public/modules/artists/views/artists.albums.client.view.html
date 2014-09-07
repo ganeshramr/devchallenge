@@ -1,0 +1,22 @@
+<section data-ng-controller="ArtistsController" data-ng-init="loadAlbumsByArtist()">
+	<div class="page-header">
+        <h1>Albums by Artist: {{artistName}}</h1>
+    </div>
+    <div class ='row'>
+    <div class="col-md-12 text-centre">
+       
+                    <div class="list-group">
+                  <div infinite-scroll="myPagingFunctionForAlbums()" infinite-scroll-distance="1">
+                    <a data-ng-repeat="album in albumList.items"  data-ng-href="#!/albums/{{album.id}}?name={{album.name}}" class="list-group-item">
+                        <h4 class="list-group-item-heading" data-ng-bind="album.name"></h4>
+                        <img ng-src="{{album.images[2].url}}" />
+                    </a>
+                </a>
+            </div>
+        </div> 
+
+        <div ng-cloak ng-hide="albumList.items.length > 0">No Albums by artist available .<div>
+            
+        </div> 
+
+    </section>

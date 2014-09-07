@@ -153,7 +153,7 @@ module.exports = function(grunt) {
 		grunt.config.set('applicationCSSFiles', config.assets.css);
 	});
 
-	// Default task(s).
+		// Default task(s).
 	grunt.registerTask('default', ['lint', 'concurrent:default']);
 
 	// Debug task.

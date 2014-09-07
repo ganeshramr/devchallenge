@@ -44,16 +44,16 @@ angular.element(document).ready(function () {
 ApplicationConfiguration.registerModule('articles');'use strict';
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('core');'use strict';
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('ganeshtests');'use strict';
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('titles');'use strict';
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('users');'use strict';
 // Configuring the Articles module
 angular.module('articles').run([
   'Menus',
   function (Menus) {
-    // Set top bar menu items
-    Menus.addMenuItem('topbar', 'Articles', 'articles', 'dropdown', '/articles(/create)?');
-    Menus.addSubMenuItem('topbar', 'articles', 'List Articles', 'articles');
-    Menus.addSubMenuItem('topbar', 'articles', 'New Article', 'articles/create');
   }
 ]);'use strict';
 // Setting up route
@@ -167,25 +167,54 @@ angular.module('core').controller('HeaderController', [
 ]);'use strict';
 angular.module('core').controller('HomeController', [
   '$scope',
+  '$http',
+  '$location',
   'Authentication',
-  function ($scope, Authentication) {
+  function ($scope, $http, $location, Authentication) {
     // This provides Authentication context.
     $scope.authentication = Authentication;
+    $scope.demosignin = function () {
+      var credentials = {
+          username: 'turnerdevc',
+          password: 'test123'
+        };
+      $http.post('/auth/signin', credentials).success(function (response) {
+        // If successful we assign the response to the global user model
+        $scope.authentication.user = response;
+        // And redirect to the title list page
+        $location.path('/titles');
+      }).error(function (response) {
+        //New account is being created;
+        credentials.firstName = 'Dev Challenge';
+        credentials.lastName = 'Demo';
+        credentials.email = 'demoprofile1@gmail.com';
+        $http.post('/auth/signup', credentials).success(function (response) {
+          // If successful we assign the response to the global user model
+          $scope.authentication.user = response;
+          // And redirect to the title list page
+          $location.path('/titles');
+        });
+      });
+    };
   }
 ]);'use strict';
 //Menu service used for managing  menus
 angular.module('core').service('Menus', [function () {
     // Define a set of default roles
-    this.defaultRoles = ['user'];
+    this.defaultRoles = ['*'];
     // Define the menus object
     this.menus = {};
     // A private function for rendering decision 
     var shouldRender = function (user) {
       if (user) {
-        for (var userRoleIndex in user.roles) {
-          for (var roleIndex in this.roles) {
-            if (this.roles[roleIndex] === user.roles[userRoleIndex]) {
-              return true;
+        if (!!~this.roles.indexOf('*')) {
+          return true;
+        } else {
+          for (var userRoleIndex in user.roles) {
+            for (var roleIndex in this.roles) {
+              if (this.roles[roleIndex] === user.roles[userRoleIndex]) {
+                return true;
+              }
             }
           }
         }
@@ -245,7 +274,7 @@ angular.module('core').service('Menus', [function () {
         menuItemClass: menuItemType,
         uiRoute: menuItemUIRoute || '/' + menuItemURL,
         isPublic: isPublic === null || typeof isPublic === 'undefined' ? this.menus[menuId].isPublic : isPublic,
-        roles: roles || this.defaultRoles,
+        roles: roles === null || typeof roles === 'undefined' ? this.menus[menuId].roles : roles,
         position: position || 0,
         items: [],
         shouldRender: shouldRender
@@ -266,7 +295,7 @@ angular.module('core').service('Menus', [function () {
             link: menuItemURL,
             uiRoute: menuItemUIRoute || '/' + menuItemURL,
             isPublic: isPublic === null || typeof isPublic === 'undefined' ? this.menus[menuId].items[itemIndex].isPublic : isPublic,
-            roles: roles || this.defaultRoles,
+            roles: roles === null || typeof roles === 'undefined' ? this.menus[menuId].items[itemIndex].roles : roles,
             position: position || 0,
             shouldRender: shouldRender
           });
@@ -306,6 +335,191 @@ angular.module('core').service('Menus', [function () {
     //Adding the topbar menu
     this.addMenu('topbar');
   }]);'use strict';
+// Configuring the Articles module
+angular.module('ganeshtests').run([
+  'Menus',
+  function (Menus) {
+  }
+]);'use strict';
+//Setting up route
+angular.module('ganeshtests').config([
+  '$stateProvider',
+  function ($stateProvider) {
+    // Ganeshtests state routing
+    $stateProvider.state('listGaneshtests', {
+      url: '/ganeshtests',
+      templateUrl: 'modules/ganeshtests/views/list-ganeshtests.client.view.html'
+    }).state('createGaneshtest', {
+      url: '/ganeshtests/create',
+      templateUrl: 'modules/ganeshtests/views/create-ganeshtest.client.view.html'
+    }).state('viewGaneshtest', {
+      url: '/ganeshtests/:ganeshtestId',
+      templateUrl: 'modules/ganeshtests/views/view-ganeshtest.client.view.html'
+    }).state('editGaneshtest', {
+      url: '/ganeshtests/:ganeshtestId/edit',
+      templateUrl: 'modules/ganeshtests/views/edit-ganeshtest.client.view.html'
+    });
+  }
+]);'use strict';
+// Ganeshtests controller
+angular.module('ganeshtests').controller('GaneshtestsController', [
+  '$scope',
+  '$stateParams',
+  '$location',
+  'Authentication',
+  'Ganeshtests',
+  function ($scope, $stateParams, $location, Authentication, Ganeshtests) {
+    $scope.authentication = Authentication;
+    // Create new Ganeshtest
+    $scope.create = function () {
+      // Create new Ganeshtest object
+      var ganeshtest = new Ganeshtests({ name: this.name });
+      // Redirect after save
+      ganeshtest.$save(function (response) {
+        $location.path('ganeshtests/' + response._id);
+        // Clear form fields
+        $scope.name = '';
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+    };
+    // Remove existing Ganeshtest
+    $scope.remove = function (ganeshtest) {
+      if (ganeshtest) {
+        ganeshtest.$remove();
+        for (var i in $scope.ganeshtests) {
+          if ($scope.ganeshtests[i] === ganeshtest) {
+            $scope.ganeshtests.splice(i, 1);
+          }
+        }
+      } else {
+        $scope.ganeshtest.$remove(function () {
+          $location.path('ganeshtests');
+        });
+      }
+    };
+    // Update existing Ganeshtest
+    $scope.update = function () {
+      var ganeshtest = $scope.ganeshtest;
+      ganeshtest.$update(function () {
+        $location.path('ganeshtests/' + ganeshtest._id);
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+    };
+    // Find a list of Ganeshtests
+    $scope.find = function () {
+      $scope.ganeshtests = Ganeshtests.query();
+    };
+    // Find existing Ganeshtest
+    $scope.findOne = function () {
+      $scope.ganeshtest = Ganeshtests.get({ ganeshtestId: $stateParams.ganeshtestId });
+    };
+  }
+]);'use strict';
+//Ganeshtests service used to communicate Ganeshtests REST endpoints
+angular.module('ganeshtests').factory('Ganeshtests', [
+  '$resource',
+  function ($resource) {
+    return $resource('ganeshtests/:ganeshtestId', { ganeshtestId: '@_id' }, { update: { method: 'PUT' } });
+  }
+]);'use strict';
+// Configuring the Articles module
+angular.module('titles').run([
+  'Menus',
+  function (Menus) {
+    // Set top bar menu items
+    Menus.addMenuItem('topbar', 'Titles', 'titles', 'dropdown', '/titles(/create)?');
+    Menus.addSubMenuItem('topbar', 'titles', 'List Titles', 'titles');
+    Menus.addSubMenuItem('topbar', 'titles', 'New Title', 'titles/create');
+  }
+]);'use strict';
+//Setting up route
+angular.module('titles').config([
+  '$stateProvider',
+  function ($stateProvider) {
+    // Titles state routing
+    $stateProvider.state('listTitles', {
+      url: '/titles',
+      templateUrl: 'modules/titles/views/list-titles.client.view.html'
+    }).state('createTitle', {
+      url: '/titles/create',
+      templateUrl: 'modules/titles/views/create-title.client.view.html'
+    }).state('viewTitle', {
+      url: '/titles/:titleId',
+      templateUrl: 'modules/titles/views/view-title.client.view.html'
+    }).state('editTitle', {
+      url: '/titles/:titleId/edit',
+      templateUrl: 'modules/titles/views/edit-title.client.view.html'
+    });
+  }
+]);'use strict';
+// Titles controller
+angular.module('titles').controller('TitlesController', [
+  '$scope',
+  '$stateParams',
+  '$location',
+  'Authentication',
+  'Titles',
+  function ($scope, $stateParams, $location, Authentication, Titles) {
+    $scope.authentication = Authentication;
+    // Create new Title
+    $scope.create = function () {
+      // Create new Title object
+      var title = new Titles({ name: this.name });
+      // Redirect after save
+      title.$save(function (response) {
+        $location.path('titles/' + response._id);
+        // Clear form fields
+        $scope.name = '';
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+    };
+    // Remove existing Title
+    $scope.remove = function (title) {
+      if (title) {
+        title.$remove();
+        for (var i in $scope.titles) {
+          if ($scope.titles[i] === title) {
+            $scope.titles.splice(i, 1);
+          }
+        }
+      } else {
+        $scope.title.$remove(function () {
+          $location.path('titles');
+        });
+      }
+    };
+    // Update existing Title
+    $scope.update = function () {
+      var title = $scope.title;
+      title.$update(function () {
+        $location.path('titles/' + title._id);
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+    };
+    // Find a list of Titles
+    $scope.find = function () {
+      $scope.titles = Titles.query();
+    };
+    $scope.incrementalSearch = function () {
+      $scope.titles = Titles.query({ name: $scope.titleName });
+    };
+    // Find existing Title
+    $scope.findOne = function () {
+      $scope.title = Titles.get({ titleId: $stateParams.titleId });
+    };
+  }
+]);'use strict';
+//Titles service used to communicate Titles REST endpoints
+angular.module('titles').factory('Titles', [
+  '$resource',
+  function ($resource) {
+    return $resource('titles/:titleId', { titleId: '@_id' }, { update: { method: 'PUT' } });
+  }
+]);'use strict';
 // Config HTTP Error Handling
 angular.module('users').config([
   '$httpProvider',

@@ -1,0 +1,29 @@
+<section data-ng-controller="ArtistsController">
+	<div class="page-header">
+        <h1>Artists</h1>
+    </div>
+    <div class ='row'>
+    <div class="col-md-12 text-centre">
+       
+            <fieldset>
+                <div class="form-group">
+                    <label class="control-label" for="artistName">Search by Name</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="artistName" ng-change="incrementalSearch()" id="artistName" class="form-control" placeholder="artist name" >
+                    </div>
+                </div>
+            
+            </fieldset>
+
+            <div class="list-group">
+                 <div infinite-scroll="myPagingFunction()" infinite-scroll-distance="1">
+                    <a data-ng-repeat="artist in artistsList.artists.items"  data-ng-href="#!/artists/{{artist.id}}/albums?artistName={{artist.name}}" class="list-group-item">
+                        <h4 class="list-group-item-heading" data-ng-bind="artist.name"></h4>
+                        <img ng-src="{{artist.images[2].url}}" />
+                    </a>
+                </div>
+
+                <div ng-cloak ng-hide="artistsList.artists.items.length > 0 || !artistName">No artists mathcing the name found.<div>
+            
+        </div> 
+    </section>

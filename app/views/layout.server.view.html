@@ -41,14 +41,22 @@
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 </head>
+<style>
+body  {
+    background-image: url('/modules/core/img/brand/background.jpg');
+    background-color: #cccccc;
+    background-size: 1500px 1000px;
+    background-repeat: no-repeat;
+}
+</style>
 
-<body class="ng-cloak">
+<body class="ng-cloak" >
 	<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>
-	<section class="content">
+	    </br>
 		<section class="container">
 			{% block content %}{% endblock %}
 		</section>
-	</section>
+	
 
 	<!--Embedding The User Object-->
 	<script type="text/javascript">

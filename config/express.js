@@ -11,16 +11,16 @@ var express = require('express'),
 	methodOverride = require('method-override'),
 	cookieParser = require('cookie-parser'),
 	helmet = require('helmet'),
-	passport = require('passport'),
+	/*passport = require('passport'),
 	mongoStore = require('connect-mongo')({
 		session: session
-	}),
+	}),*/
 	flash = require('connect-flash'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
 	path = require('path');
 
-module.exports = function(db) {
+module.exports = function() {
 	// Initialize express app
 	var app = express();
 
@@ -85,20 +85,7 @@ module.exports = function(db) {
 	// CookieParser should be above session
 	app.use(cookieParser());
 
-	// Express MongoDB session storage
-	app.use(session({
-		saveUninitialized: true,
-		resave: true,
-		secret: config.sessionSecret,
-		store: new mongoStore({
-			db: db.connection.db,
-			collection: config.sessionCollection
-		})
-	}));
-
-	// use passport session
-	app.use(passport.initialize());
-	app.use(passport.session());
+	
 
 	// connect flash for flash messages
 	app.use(flash());

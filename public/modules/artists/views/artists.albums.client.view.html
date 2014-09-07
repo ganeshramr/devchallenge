@@ -6,7 +6,7 @@
     <div class="col-md-12 text-centre">
        
                     <div class="list-group">
-                  <div infinite-scroll="myPagingFunctionForAlbums()" infinite-scroll-distance="3">
+                  <div infinite-scroll="myPagingFunctionForAlbums()" infinite-scroll-distance="1">
                     <div data-ng-repeat="album in albumList.items"   class="list-group-item">
                         <a data-ng-href="#!/albums/{{album.id}}?name={{album.name}}"><h4 class="list-group-item-heading" data-ng-bind="album.name"></h4></a>
                         <a data-ng-href="#!/albums/{{album.id}}?name={{album.name}}"><img ng-src="{{album.images[2].url}}" /></a>

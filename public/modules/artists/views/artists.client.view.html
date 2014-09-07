@@ -17,7 +17,7 @@
 
             <div class="list-group">
 
-                 <div infinite-scroll="myPagingFunction()" infinite-scroll-distance="3">
+                 <div infinite-scroll="myPagingFunction()" infinite-scroll-immediate-check="false" infinite-scroll-distance='1'>
                     <div  class="list-group-item"  data-ng-repeat="artist in artistsList.artists.items">
                         <a data-ng-href="#!/artists/{{artist.id}}/albums?artistName={{artist.name}}"><h4 class="list-group-item-heading" data-ng-bind="artist.name" ></h4> </a>
                         <a data-ng-href="#!/artists/{{artist.id}}/albums?artistName={{artist.name}}"><img ng-src="{{artist.images[2].url}}" data-ng-href="#!/artists/{{artist.id}}/albums?artistName={{artist.name}}"/></a>

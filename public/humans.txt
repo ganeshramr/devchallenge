@@ -3,13 +3,13 @@
 
 # TEAM
 
-    <name> -- <role> -- <twitter>
+    Ganeshram Ramamurthy -- Senior Software Developer 
 
 # THANKS
 
-    <name>
+    Turner for oppurtunity
 
 # TECHNOLOGY COLOPHON
 
-    HTML5, CSS3
-    jQuery, Modernizr
+    Angular,Bootstrap, Express, Nodejs
+   

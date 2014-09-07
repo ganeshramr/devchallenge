@@ -2,6 +2,18 @@
 
 var SpotifyWebApi = require('spotify-web-api-node');
 var spotifyApi = new SpotifyWebApi();
+var logger = new (winston.Logger)({
+          'transports': [
+          new (winston.transports.Console)(
+          {
+            'level': 'debug',
+            'colorize': true
+          }),
+          new (winston.transports.File)(
+          {
+            'filename': 'logging-file.log'
+          })]
+        });
 
 /**
  * List of albums
@@ -9,10 +21,10 @@ var spotifyApi = new SpotifyWebApi();
 exports.listAlbums = function(req, res) {
 
     var artistId = req.param('artistId');
-    console.log('Getting details of the album for artist id: ' + artistId);
+    logger.info('Getting details of the album for artist id: ' + artistId);
     if (artistId) {
 
-        console.log('On Page: ' + req.query.currentPage);
+        logger.debug('On Page: ' + req.query.currentPage);
         // Search albums of artists
         var offsetCalculated = 0;
         var currentPage = 1;
@@ -29,10 +41,10 @@ exports.listAlbums = function(req, res) {
                 offset: offsetCalculated
             })
             .then(function(data) {
-                console.log('Artist albums', data);
+                logger.debug('Artist albums', data);
                 res.jsonp(data);
             }, function(err) {
-                console.error(err);
+                logger.error(err);
             });
 
     }

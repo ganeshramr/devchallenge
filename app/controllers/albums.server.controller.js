@@ -2,6 +2,7 @@
 
 var SpotifyWebApi = require('spotify-web-api-node');
 var spotifyApi = new SpotifyWebApi();
+var winston = require('winston');
 var logger = new (winston.Logger)({
           'transports': [
           new (winston.transports.Console)(

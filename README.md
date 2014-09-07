@@ -24,15 +24,21 @@ To install Node.js dependencies you're going to use npm again, in the applicatio
 $ npm install
 ```
 
+To install Node.js dependencies you're going to use npm again, in the application folder run this in the command-line:
+
+```
+$ bower install
+```
+
 
 
 ## Running Your Application
 After the install process is over, you'll be able to run your application using Grunt, just run grunt default task:
 
 ```
-$ grunt
+$ grunt or $ node server.js
 ```
 
 Your application should run on the 3000 port so in your browser just go to [http://localhost:3000](http://localhost:3000)
                             
-That's it! your application should be running by now, to proceed with your development check the other sections in this documentation. 
+That's it! your application should be running by now.

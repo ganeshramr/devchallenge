@@ -15,8 +15,6 @@ var ApplicationConfiguration = (function() {
 		angular.module(applicationModuleName).requires.push(moduleName);
 	};
 
-	
-
 	return {
 		applicationModuleName: applicationModuleName,
 		applicationModuleVendorDependencies: applicationModuleVendorDependencies,

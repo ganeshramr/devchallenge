@@ -2,8 +2,8 @@
 
 module.exports = {
 	app: {
-		title: 'MEAN.JS',
-		description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
+		title: 'Turner - OFS Dev Challenge',
+		description: 'JavaScript app Express, AngularJS, and Node.js',
 		keywords: 'express, angularjs, node.js'
 	},
 	port: process.env.PORT || 3000,

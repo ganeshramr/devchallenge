@@ -10,14 +10,8 @@ var init = require('./config/init')(),
  * Main application entry file.
  * Please note that the order of loading is important.
  */
-
-
-
 // Init the express application
 var app = require('./config/express')();
-
-
-
 // Start the app by listening on <port>
 app.listen(config.port);
 

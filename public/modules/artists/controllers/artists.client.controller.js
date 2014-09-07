@@ -11,7 +11,7 @@ angular.module('artists').controller('ArtistsController', ['$scope', '$statePara
         var busyForArtists = false;
         var busyForAlbums = false;
         var valueAlreadySet = false;
-        
+
         $scope.incrementalSearch = function() {
             valueAlreadySet = false;
             setTimeout(function() {
